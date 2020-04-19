@@ -22,3 +22,7 @@ INSERT INTO service (description, price) VALUES
 INSERT INTO possible_service (service_id, event_id) VALUES
     (1, 2),
     (2, 1);
+
+--Testting trigger for contract_service--
+INSERT INTO contract_service (contract_id, service_id, event_id, cost) VALUES
+    (1, 1, 2, 25.00);
