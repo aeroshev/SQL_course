@@ -14,6 +14,8 @@ INSERT INTO event (premises_id, rent_cost) VALUES
 
 INSERT INTO contract (user_id, event_id, type, quantity_guest, date_dissolve) VALUES
     (1, 1, 'birthday', 20, '1/8/2021');
+INSERT INTO contract (user_id, event_id, type, quantity_guest, date_contract, date_dissolve) VALUES
+    (2, 2, 'corporativ', 50, now(), '12/1/2020');
 
 INSERT INTO service (description, price) VALUES
     ('taxi to place event', 25.00),
@@ -23,6 +25,22 @@ INSERT INTO possible_service (service_id, event_id) VALUES
     (1, 2),
     (2, 1);
 
+INSERT INTO paydoc (user_id, pay_date) VALUES
+    (1, now()),
+    (2, '3/24/2020');
+
 --Testting trigger for contract_service--
+--False statement--
 INSERT INTO contract_service (contract_id, service_id, event_id, cost) VALUES
     (1, 1, 2, 25.00);
+--True statement--
+INSERT INTO contract_service (contract_id, service_id, event_id, cost) VALUES
+    (1, 2, 1, 75);
+
+--Testing trigger payment--
+--False statement--
+INSERT INTO payment (paydoc_id, contract_id, payed) VALUES
+    (1, 2, 10.00);
+--True statement--
+INSERT INTO payment (paydoc_id, contract_id, payed) VALUES
+    (1, 1, 10.00);
