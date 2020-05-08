@@ -52,4 +52,5 @@ INSERT INTO star (real_name, nick_name, fee, contacts, price) VALUES
 
 INSERT INTO subsidiary_agreement (event_id, star_id, price) VALUES
             (1, 1, 2000.00),
-            (2, 3, 900.00);
+            (2, 3, 900.00),
+            (1, 3, 4000.00);
