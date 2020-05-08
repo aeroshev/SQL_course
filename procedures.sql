@@ -72,6 +72,5 @@ BEGIN
         WHERE
             invite.star_id = id_star;
     END IF;
-    CLOSE ref_sub_agr;
 END;
 $$;
