@@ -62,7 +62,7 @@ BEGIN
     FETCH ref_sub_agr INTO qty_et, tlp;
 
     IF (SELECT star_id FROM invite WHERE invite.star_id = id_star) IS NULL THEN
-        INSERT INTO invite (star_id, last_update_date, qty_events, total_payments) VALUES (id_star, now(), qty_et, tlp);
+        INSERT INTO invite (star_id, last_update_date, qty_events, total_payments) VALUES (id_star, now(), CASE WHEN qty_et IS NULL THEN 0 END, CASE WHEN tlp IS NULL THEN CAST(0.0 as money) END);
         COMMIT;
     ELSE
         UPDATE invite
