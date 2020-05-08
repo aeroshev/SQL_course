@@ -44,3 +44,8 @@ INSERT INTO payment (paydoc_id, contract_id, payed) VALUES
 --True statement--
 INSERT INTO payment (paydoc_id, contract_id, payed) VALUES
     (1, 1, 10.00);
+
+INSERT INTO star (real_name, nick_name, fee, contacts, price) VALUES
+    ('Kianu_Rivz', 'John Wick', 1000.00, 'Canada', 1200.00)
+    ('Genri Kavill', 'Witcher', 2000.00, 'California', 2500.00),
+    ('Bredli Cuper', 'Lebo', 800.00, 'New York', 900.00);
