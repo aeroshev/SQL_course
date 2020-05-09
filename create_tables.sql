@@ -83,7 +83,6 @@ CREATE TABLE contract_service (
     contract_id serial NOT NULL,
     service_id serial NOT NULL,
     event_id serial NOT NULL,
-    cost money NOT NULL CHECK (cost >= CAST(0.00 as money)),
     FOREIGN KEY (contract_id) REFERENCES contract ON DELETE CASCADE,
     FOREIGN KEY (service_id, event_id) REFERENCES possible_service ON DELETE CASCADE
 );
@@ -94,13 +93,11 @@ CREATE TABLE star (
     nick_name character varying(20) NULL,
     fee money NOT NULL CHECK (fee >= CAST(0.00 as money)),
     contacts character varying(40) NOT NULL,
-    price money NOT NULL CHECK (price >= CAST(0.00 as money))
 );
 
 CREATE TABLE subsidiary_agreement (
     event_id serial NOT NULL,
     star_id serial NOT NULL,
-    price money NOT NULL CHECK (price >= CAST(0.00 as money)),
     PRIMARY KEY (event_id, star_id),
     FOREIGN KEY (event_id) REFERENCES event ON DELETE CASCADE,
     FOREIGN KEY (star_id) REFERENCES star ON DELETE CASCADE

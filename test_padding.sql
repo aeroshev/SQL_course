@@ -31,11 +31,11 @@ INSERT INTO paydoc (user_id, pay_date) VALUES
 
 --Testting trigger for contract_service--
 --False statement--
-INSERT INTO contract_service (contract_id, service_id, event_id, cost) VALUES
-    (1, 1, 2, 25.00);
+INSERT INTO contract_service (contract_id, service_id, event_id) VALUES
+    (1, 1, 2);
 --True statement--
-INSERT INTO contract_service (contract_id, service_id, event_id, cost) VALUES
-    (1, 2, 1, 75);
+INSERT INTO contract_service (contract_id, service_id, event_id) VALUES
+    (1, 2, 1);
 
 --Testing trigger payment--
 --False statement--
@@ -45,12 +45,12 @@ INSERT INTO payment (paydoc_id, contract_id, payed) VALUES
 INSERT INTO payment (paydoc_id, contract_id, payed) VALUES
     (1, 1, 10.00);
 
-INSERT INTO star (real_name, nick_name, fee, contacts, price) VALUES
-    ('Kianu_Rivz', 'John Wick', 1000.00, 'Canada', 1200.00)
-    ('Genri Kavill', 'Witcher', 2000.00, 'California', 2500.00),
-    ('Bredli Cuper', 'Lebo', 800.00, 'New York', 900.00);
+INSERT INTO star (real_name, nick_name, fee, contacts) VALUES
+    ('Kianu_Rivz', 'John Wick', 1000.00, 'Canada'),
+    ('Genri Kavill', 'Witcher', 2000.00, 'California'),
+    ('Bredli Cuper', 'Lebo', 800.00, 'New York');
 
-INSERT INTO subsidiary_agreement (event_id, star_id, price) VALUES
-            (1, 1, 2000.00),
-            (2, 3, 900.00),
-            (1, 3, 4000.00);
+INSERT INTO subsidiary_agreement (event_id, star_id) VALUES
+    (1, 1),
+    (1, 2),
+    (2, 1);
