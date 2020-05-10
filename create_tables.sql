@@ -92,7 +92,7 @@ CREATE TABLE star (
     real_name character varying(20) NOT NULL,
     nick_name character varying(20) NULL,
     fee money NOT NULL CHECK (fee >= CAST(0.00 as money)),
-    contacts character varying(40) NOT NULL,
+    contacts character varying(40) NOT NULL
 );
 
 CREATE TABLE subsidiary_agreement (

@@ -10,12 +10,13 @@ INSERT INTO premises (type, address, square, name, price) VALUES
 
 INSERT INTO event (premises_id, rent_cost) VALUES
     (1, 75.34),
-    (2, 39.11);
+    (2, 39.11),
+    (1, 2000.00);
 
 INSERT INTO contract (user_id, event_id, type, quantity_guest, date_dissolve) VALUES
-    (1, 1, 'birthday', 20, '1/8/2021');
-INSERT INTO contract (user_id, event_id, type, quantity_guest, date_contract, date_dissolve) VALUES
-    (2, 2, 'corporativ', 50, now(), '12/1/2020');
+    (1, 1, 'birthday', 20, '1/8/2021'),
+    (2, 2, 'corporativ', 50, now(), '12/1/2020'),
+    (4, 3, 'wedding', 30, '2/10/2019', '04/20/2020');
 
 INSERT INTO service (description, price) VALUES
     ('taxi to place event', 25.00),
