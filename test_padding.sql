@@ -6,17 +6,22 @@ INSERT INTO client (type) VALUES
 
 INSERT INTO premises (type, address, square, name, price) VALUES
     ('flat', 'New York, Main street, build 42', 75.34, 'Main Hotel', 5000.00),
-    ('hostel', 'Moskovskay oblast, Stupino, build 34', 39.11, 'U dady Stepu', 20.00);
+    ('hostel', 'Moskovskay oblast, Stupino, build 34', 39.11, 'U dady Stepu', 20.00),
+    ('hotel', 'Moscow, red square, GUM', 120, 'U Putina', 3000.00);
 
 INSERT INTO event (premises_id, rent_cost) VALUES
     (1, 75.34),
     (2, 39.11),
-    (1, 2000.00);
+    (1, 2000.00),
+    (2, 200.00),
+    (3, 500.00);
 
-INSERT INTO contract (user_id, event_id, type, quantity_guest, date_dissolve) VALUES
-    (1, 1, 'birthday', 20, '1/8/2021'),
+INSERT INTO contract (user_id, event_id, type, quantity_guest, date_contract, date_dissolve) VALUES
+    (1, 1, 'birthday', 20, now(), '1/8/2021'),
     (2, 2, 'corporativ', 50, now(), '12/1/2020'),
-    (4, 3, 'wedding', 30, '2/10/2019', '04/20/2020');
+    (4, 3, 'wedding', 30, '2/10/2019', '04/20/2020'),
+    (1, 4, 'happy end', 5, '5/10/2020', '7/10/2020'),
+    (2, 5, 'happy start', 10, '5/8/2020', '7/8/2020');
 
 INSERT INTO service (description, price) VALUES
     ('taxi to place event', 25.00),
