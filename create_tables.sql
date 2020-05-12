@@ -39,7 +39,7 @@ CREATE TABLE premises (
 CREATE TABLE event (
     event_id serial NOT NULL PRIMARY KEY,
     premises_id serial NOT NULL,
-    rent_cost money NOT NULL CHECK (rent_cost >= CAST(0.00 as money)),
+    rent_cost money NOT NULL CHECK (rent_cost >= 0.0::money),
     FOREIGN KEY (premises_id) REFERENCES premises ON DELETE NO ACTION
 );
 
@@ -58,7 +58,7 @@ CREATE TABLE contract (
 CREATE TABLE payment (
     paydoc_id serial NOT NULL,
     contract_id serial NOT NULL,
-    payed money NOT NULL CHECK (payed >= CAST(0.00 as money)),
+    payed money NOT NULL CHECK (payed >= 0.0::money),
     PRIMARY KEY (paydoc_id, contract_id),
     FOREIGN KEY (paydoc_id) REFERENCES paydoc ON DELETE CASCADE,
     FOREIGN KEY (contract_id) REFERENCES contract ON DELETE CASCADE
@@ -67,7 +67,7 @@ CREATE TABLE payment (
 CREATE TABLE service (
     service_id serial NOT NULL PRIMARY KEY,
     description character varying(100) NULL,
-    price money NOT NULL CHECK (price >= CAST(0.00 as money))
+    price money NOT NULL CHECK (price >= 0.0::money)
 );
 
 CREATE TABLE possible_service (
@@ -91,7 +91,7 @@ CREATE TABLE star (
     star_id serial NOT NULL PRIMARY KEY,
     real_name character varying(20) NOT NULL,
     nick_name character varying(20) NULL,
-    fee money NOT NULL CHECK (fee >= CAST(0.00 as money)),
+    fee money NOT NULL CHECK (fee >= 0.0::money),
     contacts character varying(40) NOT NULL
 );
 

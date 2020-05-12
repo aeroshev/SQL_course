@@ -26,5 +26,6 @@ SELECT count(*) AS qty_dissolved_contracts FROM contract WHERE now() >= date_dis
 CREATE OR REPLACE VIEW happy_time.public.orders_clients (const_client_id, qty_orders) AS
     SELECT user_id, count(*) FROM contract GROUP BY user_id;
 --Create report--
-SELECT * FROM contract AS c JOIN orders_clients AS oc ON c.user_id = oc.const_client_id
-    WHERE oc.qty_orders = (SELECT max(qty_orders) FROM orders_clients);
+SELECT c.user_id, oc.qty_orders, count(DISTINCT c.event_id) AS qty_dif_events FROM contract AS c JOIN
+    orders_clients AS oc ON c.user_id = oc.const_client_id
+    WHERE oc.qty_orders = (SELECT max(qty_orders) FROM orders_clients) GROUP BY c.user_id, oc.qty_orders;
