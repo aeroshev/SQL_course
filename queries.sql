@@ -1,24 +1,17 @@
 --Exercise 1--
---Qty clients--
-SELECT count(*) AS qty_clients FROM client;
---Qty contracts--
-SELECT count(*) AS qty_contracts FROM contract;
---Qty different events for which conclude contract--
---First way--
-CREATE OR REPLACE VIEW public.contract_event (_event_) AS SELECT event_id FROM contract;
-SELECT count(event_id) AS event_in_contract FROM event JOIN contract_event ON event.event_id = contract_event._event_;
---or--
-SELECT count(e.event_id) AS qty_register_events FROM event AS e JOIN contract AS c ON e.event_id = c.event_id;
---Qty services provided--
-SELECT count(*) AS sevices_provided FROM contract_service;
---Income per all period--
-SELECT sum(rent_cost) AS income FROM event;
---Qty contract premises--
-SELECT count(premises_id) AS qty_contracts_premises FROM event;
---Qty star invite--
-SELECT count(*) AS qty_invites_stars FROM invite WHERE qty_events > 0;
---Qty dissolved contracts--
-SELECT count(*) AS qty_dissolved_contracts FROM contract WHERE now() >= date_dissolve;
+SELECT  count(DISTINCT user_id) AS qty_clients,
+        count(contract_id) AS qty_contracts,
+        count(DISTINCT c.event_id) AS qty_register_events,
+        (SELECT count(*) AS sevices_provided FROM contract_service),
+        count(premises_id) AS qty_contracts_premises,
+        sum(rent_cost) AS income,
+        (SELECT sum(count_total_cost(contract_id)) FROM contract) AS total_money,
+        (SELECT sum(total_payments) FROM invite) AS total_payed_stars,
+        (SELECT sum(s.price) FROM contract_service AS cs JOIN service AS s ON cs.service_id = s.service_id) AS total_payed_service,
+        (SELECT sum(p.price) FROM premises AS p JOIN event AS e ON e.premises_id = p.premises_id) AS total_payed_premises,
+        (SELECT count(*) AS qty_invites_stars FROM invite WHERE qty_events > 0),
+        (SELECT count(*) AS qty_dissolved_contracts FROM contract WHERE now() >= date_dissolve)
+        FROM contract AS c JOIN event AS e ON c.event_id = e.event_id;
 
 --Exercise 2--
 --Create view with command--

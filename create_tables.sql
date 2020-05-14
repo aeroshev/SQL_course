@@ -33,12 +33,13 @@ CREATE TABLE premises (
     address character varying(40) NOT NULL UNIQUE,
     square numeric(5, 2) NOT NULL,
     name character varying(40) NOT NULL,
-    price money NOT NULL
+    price money NOT NULL CHECK (price >= 0.0::money)
 );
 
 CREATE TABLE event (
     event_id serial NOT NULL PRIMARY KEY,
-    premises_id serial NOT NULL,
+    premises_id serial NULL,
+    type character varying (40) NOT NULL,
     rent_cost money NOT NULL CHECK (rent_cost >= 0.0::money),
     FOREIGN KEY (premises_id) REFERENCES premises ON DELETE NO ACTION
 );
@@ -47,7 +48,6 @@ CREATE TABLE contract (
     contract_id serial NOT NULL PRIMARY KEY,
     user_id serial NOT NULL,
     event_id serial NOT NULL,
-    type character varying (40) NOT NULL,
     quantity_guest smallint NOT NULL CHECK (quantity_guest >= 0),
     date_contract date NOT NULL DEFAULT current_date,
     date_dissolve date NOT NULL CHECK (date_dissolve > date_contract),
