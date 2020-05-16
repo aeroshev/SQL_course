@@ -22,6 +22,15 @@ CREATE OR REPLACE VIEW happy_time.public.orders_clients (const_client_id, qty_or
 SELECT c.user_id, oc.qty_orders, count(DISTINCT c.event_id) AS qty_dif_events FROM contract AS c JOIN
     orders_clients AS oc ON c.user_id = oc.const_client_id
     WHERE oc.qty_orders = (SELECT max(qty_orders) FROM orders_clients) GROUP BY c.user_id, oc.qty_orders;
+--Exercise 3--
+
+
+--Exercise 4--
+WITH income_services (contract_id, description, price) AS (
+    SELECT contract_id, description, price FROM contract_service AS cs JOIN service AS s ON cs.service_id = s.service_id
+)
+SELECT description, count(c.contract_id) AS qty_contracts, max(date_contract) AS last_mention, sum(price)
+    FROM contract AS c JOIN income_services AS isr ON c.contract_id = isr.contract_id GROUP BY description;
 
 --Exercise 5--
 WITH not_null_premises_event (event_id, name, price, qty_premises) AS (
@@ -34,6 +43,7 @@ SELECT
     count(*) AS qty_contracts,
     qty_premises,
     price,
+    --Check this column--
     price - (SELECT sum(count_total_cost(contract_id))) AS profit
     FROM contract AS c JOIN not_null_premises_event AS nn ON c.event_id = nn.event_id
         GROUP BY name, qty_premises, price;
