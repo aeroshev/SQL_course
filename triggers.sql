@@ -1,4 +1,4 @@
---Trigger for table contract service--
+--Trigger for table contract service (Check permission service for event)--
 CREATE OR REPLACE FUNCTION check_contract_service() RETURNS TRIGGER AS $check_contract_service$
     DECLARE
         event integer DEFAULT -1;
@@ -16,7 +16,7 @@ CREATE TRIGGER check_contract_service AFTER INSERT OR UPDATE ON contract_service
     EXECUTE PROCEDURE check_contract_service();
 
 
---Trigger for table payment--
+--Trigger for table payment (Check ownership new payment user)--
 CREATE OR REPLACE FUNCTION check_of_payment() RETURNS TRIGGER AS $check_payement$
     DECLARE
         paying_user int;

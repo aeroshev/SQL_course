@@ -10,14 +10,22 @@ INSERT INTO premises (type, address, square, name, price) VALUES
     ('hostel', 'Moskovskay oblast, Stupino, build 34', 39.11, 'U dady Stepu', 20.00),
     ('hotel', 'Moscow, red square, GUM', 120, 'U Putina', 3000.00);
 
-INSERT INTO event (premises_id, type, rent_cost) VALUES
-    (1, 'birthday', 75.34::money),
-    (2, 'corporativ', 39.11::money),
-    (1, 'wedding', 2000.00::money),
-    (2, 'happy end',200.00::money),
-    (3, 'happy start', 500.00::money),
-    (NULL, 'open store', 100.00::money),
-    (2, 300.00::money, 'meeting');
+INSERT INTO event (type, rent_cost) VALUES
+    ('birthday', 75.34::money),
+    ('corporativ', 39.11::money),
+    ('wedding', 2000.00::money),
+    ('happy end',200.00::money),
+    ('happy start', 500.00::money),
+    ('open store', 100.00::money),
+    (300.00::money, 'meeting');
+
+INSERT INTO rental_agreement (event_id, premises_id) VALUES
+    (2, 1),
+    (4, 1),
+    (6, 2),
+    (2, 3),
+    (2, 2),
+    (1, 1);
 
 INSERT INTO contract (user_id, event_id, quantity_guest, date_contract, date_dissolve) VALUES
     (1, 1, 20, now(), '1/8/2021'),

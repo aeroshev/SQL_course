@@ -40,8 +40,15 @@ CREATE TABLE event (
     event_id serial NOT NULL PRIMARY KEY,
     premises_id serial NULL,
     type character varying (40) NOT NULL,
-    rent_cost money NOT NULL CHECK (rent_cost >= 0.0::money),
-    FOREIGN KEY (premises_id) REFERENCES premises ON DELETE NO ACTION
+    rent_cost money NOT NULL CHECK (rent_cost >= 0.0::money)
+);
+
+CREATE TABLE rental_agreement (
+    event_id serial NOT NULL,
+    premises_id serial NOT NULL,
+    PRIMARY KEY (event_id, premises_id),
+    FOREIGN KEY (event_id) REFERENCES event ON DELETE CASCADE,
+    FOREIGN KEY (premises_id) REFERENCES premises ON DELETE CASCADE
 );
 
 CREATE TABLE contract (
@@ -101,4 +108,11 @@ CREATE TABLE subsidiary_agreement (
     PRIMARY KEY (event_id, star_id),
     FOREIGN KEY (event_id) REFERENCES event ON DELETE CASCADE,
     FOREIGN KEY (star_id) REFERENCES star ON DELETE CASCADE
+);
+
+CREATE TABLE invite (
+    star_id serial NOT NULL PRIMARY KEY,
+    last_update_date date NOT NULL DEFAULT current_date,
+    qty_events integer NOT NULL DEFAULT 0,
+    total_payments money NOT NULL DEFAULT 0.0::money
 );

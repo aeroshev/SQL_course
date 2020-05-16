@@ -2,13 +2,13 @@
 SELECT  count(DISTINCT user_id) AS qty_clients,
         count(contract_id) AS qty_contracts,
         count(DISTINCT c.event_id) AS qty_register_events,
-        (SELECT count(*) AS sevices_provided FROM contract_service),
-        count(premises_id) AS qty_contracts_premises,
+        (SELECT count(DISTINCT service_id) AS sevices_provided FROM contract_service),
+        (SELECT count(premises_id) FROM rental_agreement) AS qty_contracts_premises,
         sum(rent_cost) AS income,
         (SELECT sum(count_total_cost(contract_id)) FROM contract) AS total_money,
         (SELECT sum(total_payments) FROM invite) AS total_payed_stars,
         (SELECT sum(s.price) FROM contract_service AS cs JOIN service AS s ON cs.service_id = s.service_id) AS total_payed_service,
-        (SELECT sum(p.price) FROM premises AS p JOIN event AS e ON e.premises_id = p.premises_id) AS total_payed_premises,
+        (SELECT sum(p.price) FROM premises AS p JOIN rental_agreement AS ra ON ra.premises_id = p.premises_id) AS total_payed_premises,
         (SELECT count(*) AS qty_invites_stars FROM invite WHERE qty_events > 0),
         (SELECT count(*) AS qty_dissolved_contracts FROM contract WHERE now() >= date_dissolve)
         FROM contract AS c JOIN event AS e ON c.event_id = e.event_id;
@@ -22,3 +22,18 @@ CREATE OR REPLACE VIEW happy_time.public.orders_clients (const_client_id, qty_or
 SELECT c.user_id, oc.qty_orders, count(DISTINCT c.event_id) AS qty_dif_events FROM contract AS c JOIN
     orders_clients AS oc ON c.user_id = oc.const_client_id
     WHERE oc.qty_orders = (SELECT max(qty_orders) FROM orders_clients) GROUP BY c.user_id, oc.qty_orders;
+
+--Exercise 5--
+WITH not_null_premises_event (event_id, name, price, qty_premises) AS (
+    SELECT e.event_id, type, rent_cost, count(*) FROM event AS e JOIN rental_agreement AS ra ON e.event_id = ra.event_id
+        WHERE e.event_id IN (SELECT event_id FROM rental_agreement) GROUP BY e.event_id, type, rent_cost
+)
+
+SELECT
+    name,
+    count(*) AS qty_contracts,
+    qty_premises,
+    price,
+    price - (SELECT sum(count_total_cost(contract_id))) AS profit
+    FROM contract AS c JOIN not_null_premises_event AS nn ON c.event_id = nn.event_id
+        GROUP BY name, qty_premises, price;
