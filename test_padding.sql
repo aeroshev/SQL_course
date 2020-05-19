@@ -38,11 +38,22 @@ INSERT INTO contract (user_id, event_id, quantity_guest, date_contract, date_dis
 
 INSERT INTO service (description, price) VALUES
     ('taxi to place event', 25.00),
-    ('horse ride', 15.00);
+    ('horse ride', 15.00),
+    ('minibus', 100.00::money),
+    ('karaoke', 50.00::money),
+    ('group invite', 20.00::money),
+    ('toast-master', 120.00::money);
 
 INSERT INTO possible_service (service_id, event_id) VALUES
     (1, 2),
-    (2, 1);
+    (2, 1),
+    (1, 1),
+    (1, 3),
+    (1, 6),
+    (5, 5),
+    (5, 6),
+    (5, 4),
+    (6, 3);
 
 INSERT INTO paydoc (user_id, pay_date) VALUES
     (1, now()),
@@ -57,6 +68,11 @@ INSERT INTO contract_service (contract_id, service_id, event_id) VALUES
 --True statement--
 INSERT INTO contract_service (contract_id, service_id, event_id) VALUES
     (1, 2, 1);
+
+CALL push_service_in_contract(1,1, 'OK');
+CALL push_service_in_contract(2, 1,'OK');
+CALL push_service_in_contract(7, 2, 'OK');
+CALL push_service_in_contract(5, 5, 'OK');
 
 --Testing trigger payment--
 --False statement--
