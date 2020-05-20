@@ -1,3 +1,4 @@
+------------------------------------------------------------------------------------------------------------------------
 --Trigger for table contract service (Check permission service for event)--
 CREATE OR REPLACE FUNCTION check_contract_service() RETURNS TRIGGER AS $check_contract_service$
     DECLARE
@@ -15,7 +16,7 @@ CREATE TRIGGER check_contract_service AFTER INSERT OR UPDATE ON contract_service
     FOR EACH ROW
     EXECUTE PROCEDURE check_contract_service();
 
-
+------------------------------------------------------------------------------------------------------------------------
 --Trigger for table payment (Check ownership new payment user)--
 CREATE OR REPLACE FUNCTION check_of_payment() RETURNS TRIGGER AS $check_payement$
     DECLARE
@@ -35,3 +36,4 @@ CREATE OR REPLACE FUNCTION check_of_payment() RETURNS TRIGGER AS $check_payement
 CREATE TRIGGER check_payment AFTER INSERT OR UPDATE ON payment
     FOR EACH ROW
     EXECUTE PROCEDURE check_of_payment();
+------------------------------------------------------------------------------------------------------------------------

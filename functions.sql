@@ -1,3 +1,5 @@
+------------------------------------------------------------------------------------------------------------------------
+--Count all spending for one contract :param - contract_id--
 CREATE OR REPLACE FUNCTION count_total_cost(number_contract integer) RETURNS money AS $$
 DECLARE
     total_cost money = 0.0;
@@ -26,6 +28,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+------------------------------------------------------------------------------------------------------------------------
+--Automatically checker equal event in contract table and contract_service table--
 CREATE OR REPLACE PROCEDURE push_service_in_contract(IN id_contract integer DEFAULT 0, IN id_service integer DEFAULT 0,
                                           INOUT status varchar(45) DEFAULT 'OK')
 LANGUAGE plpgsql
@@ -57,3 +61,31 @@ BEGIN
         (valid_contract, valid_service, current_event);
 END;
 $$;
+
+------------------------------------------------------------------------------------------------------------------------
+--Count all spending for one event :param - event_id--
+CREATE OR REPLACE FUNCTION count_money_for_all(id_event integer) RETURNS money LANGUAGE plpgsql AS $$
+DECLARE
+    total_cost money = 0.0;
+BEGIN
+    IF (SELECT event_id FROM event WHERE event_id = id_event) IS NULL THEN
+        RAISE EXCEPTION 'Invalid id_event';
+    END IF;
+
+    --Count price of executed event--
+    total_cost := total_cost + (SELECT rent_cost FROM event WHERE event_id = id_event);
+    --Count total payment for rent premises--
+    total_cost := total_cost + coalesce((SELECT sum(price) FROM rental_agreement AS ra JOIN premises AS p
+        ON ra.premises_id = p.premises_id WHERE ra.event_id = id_event), 0.0::money);
+    --Count total payment for invite stars--
+    total_cost := total_cost + coalesce((SELECT sum(fee) FROM event JOIN subsidiary_agreement AS sa ON
+        event.event_id = sa.event_id JOIN star ON sa.star_id = star .star_id WHERE event.event_id = id_event),
+        0.0::money);
+     --Count total payment for provided service--
+    total_cost := total_cost + coalesce((SELECT sum(price) FROM contract_service AS cs JOIN service AS s
+        ON cs.service_id = s.service_id WHERE cs.event_id = id_event), 0.0::money);
+
+    RETURN total_cost;
+END;
+$$;
+------------------------------------------------------------------------------------------------------------------------

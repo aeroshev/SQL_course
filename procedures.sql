@@ -1,3 +1,4 @@
+------------------------------------------------------------------------------------------------------------------------
 --Procedure of insert new payment--
 CREATE OR REPLACE PROCEDURE registration_paydoc(IN id_paydoc integer = 0, IN id_contract integer = 0,
                                                 IN id_user integer = 0, IN payable money = 0.0,
@@ -39,6 +40,7 @@ BEGIN
 END;
 $$;
 
+------------------------------------------------------------------------------------------------------------------------
 --Create extra table--
 CREATE TABLE invite (
     star_id serial NOT NULL PRIMARY KEY,
@@ -46,6 +48,7 @@ CREATE TABLE invite (
     qty_events integer NOT NULL DEFAULT 0,
     total_payments money NOT NULL DEFAULT 0.0::money
 );
+------------------------------------------------------------------------------------------------------------------------
 --Procedure count of invite star--
 CREATE OR REPLACE PROCEDURE count_invite_star(INOUT message character varying(20) = 'OK')
 LANGUAGE plpgsql
@@ -81,3 +84,4 @@ BEGIN
     message := 'OK';
 END;
 $$;
+------------------------------------------------------------------------------------------------------------------------
