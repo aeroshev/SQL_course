@@ -89,3 +89,25 @@ BEGIN
 END;
 $$;
 ------------------------------------------------------------------------------------------------------------------------
+--Insert new client--
+CREATE OR REPLACE PROCEDURE insert_client(IN type varchar(12) DEFAULT '', IN name_ varchar(100) DEFAULT '',
+                                          IN address varchar(200) DEFAULT '', IN id integer DEFAULT 0,
+                                          INOUT status varchar(20) DEFAULT 'OK')
+LANGUAGE plpgsql AS $$
+DECLARE
+    id_user integer;
+BEGIN
+    INSERT INTO client (type) VALUES (type);
+
+    id_user := (SELECT currval('client_user_id_seq'));
+    IF type ='individual' THEN
+        INSERT INTO individual (user_id, name, number_id, place_residence) VALUES (id_user, name_, id, address);
+    ELSIF type = 'organization' THEN
+        INSERT INTO organization (user_id, name_org, address_org) VALUES (id_user, name_, address);
+    ELSE
+        status := 'Error type client';
+        DELETE FROM client WHERE user_id = id_user;
+    END IF;
+END;
+$$;
+------------------------------------------------------------------------------------------------------------------------

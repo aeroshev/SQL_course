@@ -5,6 +5,15 @@ INSERT INTO client (type) VALUES
     ('organization'),
     ('individual');
 
+INSERT INTO individual (user_id, name, number_id, place_residence) VALUES
+    (1, 'Johny Winson', 244235, 'Los Angeles, near beach'),
+    (2, 'Mike Tayson', 11111, 'Los Angeles, Beverli Hills'),
+    (5, 'Michael Sidorov', 451299, 'Voronez, ulitza Lenina');
+
+INSERT INTO organization (user_id, name_org, address_org) VALUES
+    (3, 'EC', 'New York, Mancheten'),
+    (4, 'Lukoil', 'Moscow, Chistue Prudu');
+
 INSERT INTO premises (type, address, square, name, price) VALUES
     ('flat', 'New York, Main street, build 42', 75.34, 'Main Hotel', 5000.00),
     ('hostel', 'Moskovskay oblast, Stupino, build 34', 39.11, 'U dady Stepu', 20.00),
