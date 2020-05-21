@@ -20,9 +20,35 @@ SELECT  count(DISTINCT user_id) AS qty_clients,
 --Exercise 2--
 WITH orders_clients (user_id, qty_orders) AS (
     SELECT user_id, count(*) FROM contract GROUP BY user_id
+), data_client (user_id, name, address) AS (
+    SELECT user_id, name, place_residence FROM individual
+    UNION
+    SELECT user_id, name_org, address_org FROM organization
+), serv_services (user_id, qty_serv_services) AS (
+    SELECT user_id, count(string_id) FROM contract c JOIN contract_service cs ON c.contract_id = cs.contract_id
+        GROUP BY user_id
+), diff_payment (user_id, contract_id, return_money) AS (
+    SELECT user_id,
+           c.contract_id,
+           --Penalty 15%--
+           sum(payed) * 0.85
+    FROM payment p JOIN contract c ON p.contract_id = c.contract_id WHERE now() >= date_dissolve
+        GROUP BY user_id, c.contract_id
 )
 
-SELECT user_id,  count(*) AS qty_orders, count(DISTINCT event_id) AS diff_events FROM contract GROUP BY user_id
+SELECT
+       c.user_id,
+       name,
+       address,
+       count(*) AS qty_orders,
+       count(DISTINCT event_id) AS diff_events,
+       (SELECT qty_serv_services FROM serv_services WHERE user_id = c.user_id),
+       (SELECT sum(rent_cost) FROM event e JOIN contract c_ ON e.event_id = c_.event_id WHERE c_.user_id = c.user_id)
+            AS all_payed,
+       --?--Alter table
+       (SELECT count(*) AS qty_dissolved_contracts FROM contract WHERE now() >= date_dissolve AND user_id = c.user_id),
+       coalesce((SELECT return_money FROM diff_payment WHERE user_id = c.user_id), 0.00::money) AS back_cash
+    FROM contract c JOIN data_client dc ON c.user_id = dc.user_id GROUP BY c.user_id, name, address
     HAVING count(*) = (SELECT max(qty_orders) FROM orders_clients);
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -42,6 +68,8 @@ SELECT
     coalesce(round(avg(qty_service_ic), 2), 0)  AS avg_qty_services_in_contract,
     (SELECT count(DISTINCT user_id) FROM contract WHERE event_id = e.event_id) AS qty_client_use,
     (SELECT count(DISTINCT star_id) FROM subsidiary_agreement WHERE event_id = e.event_id) AS qty_stars,
+    rent_cost AS price_event,
+    (SELECT count_money_for_all(e.event_id)) AS spending_money,
     rent_cost - (SELECT count_money_for_all(e.event_id)) AS profit,
     coalesce((SELECT sum(fee) FROM subsidiary_agreement sa JOIN star s ON sa.star_id = s.star_id
         WHERE sa.event_id = e.event_id), 0.00::money) AS all_payment_stars
@@ -69,8 +97,8 @@ SELECT
     count(*) AS qty_contracts,
     qty_premises,
     price,
-    --Check this column (Maybe it's right)--
-    price - (SELECT sum(count_total_cost(contract_id))) AS profit
+    (SELECT count_money_for_all(nn.event_id)) AS all_spending,
+    price - (SELECT count_money_for_all(nn.event_id)) AS profit
     FROM contract AS c JOIN not_null_premises_event AS nn ON c.event_id = nn.event_id
-        GROUP BY name, qty_premises, price;
+        GROUP BY nn.event_id, name, qty_premises, price;
 ------------------------------------------------------------------------------------------------------------------------

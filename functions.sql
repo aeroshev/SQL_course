@@ -72,8 +72,6 @@ BEGIN
         RAISE EXCEPTION 'Invalid id_event';
     END IF;
 
-    --Count price of executed event--
-    total_cost := total_cost + (SELECT rent_cost FROM event WHERE event_id = id_event);
     --Count total payment for rent premises--
     total_cost := total_cost + coalesce((SELECT sum(price) FROM rental_agreement AS ra JOIN premises AS p
         ON ra.premises_id = p.premises_id WHERE ra.event_id = id_event), 0.0::money);

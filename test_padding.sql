@@ -100,3 +100,5 @@ INSERT INTO subsidiary_agreement (event_id, star_id) VALUES
     (1, 1),
     (1, 2),
     (2, 1);
+
+CALL registration_paydoc(-1,3,4,2000.00::money,'OK');
