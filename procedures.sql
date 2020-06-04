@@ -69,7 +69,6 @@ BEGIN
         IF (SELECT star_id FROM invite WHERE invite.star_id = strID) IS NULL THEN
             INSERT INTO invite (star_id, last_update_date, qty_events, total_payments) VALUES
                 (strID, now(), coalesce(qty_et, 0), coalesce(smf, 0.0::money));
-            COMMIT;
         ELSE
             UPDATE invite
             SET last_update_date = now(),
@@ -77,7 +76,6 @@ BEGIN
                 total_payments = coalesce(smf, 0.0::money)
             WHERE
                 invite.star_id = strID;
-            COMMIT;
         END IF;
     END LOOP;
 
